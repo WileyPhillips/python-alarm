@@ -8,9 +8,12 @@ root.configure(bg=bgColor)
 
 
 def set_screen():
-    global gui, text_entry, am_pm
+    global gui, text_entry, am_pm_entry, amPm
+    amPm = "am"
     text_entry = StringVar()
     text_entry.set("N/A")
+    am_pm_entry = StringVar()
+    am_pm_entry.set(amPm)
     alarms = [
         Label(root, text="       ")
     ]
@@ -19,7 +22,7 @@ def set_screen():
         Label(root, textvariable=text_entry),
         Entry(root),
         Entry(root),
-        Label(root, text="am"),
+        Label(root, textvariable=am_pm_entry),
         Button(root, text="^"),
         Button(root, text="v"),
         Button(root, text="^"),
@@ -41,10 +44,13 @@ def set_screen():
 
 # ERROR need to get label text
 def time_of_day():
-    if gui[4].text == "am":
-        gui[4].configure(text="pm")
+    global amPm
+    if amPm == "am":
+        amPm = "pm"
+        am_pm_entry.set(amPm)
     else:
-        gui[4].configure(text="am")
+        amPm = "am"
+        am_pm_entry.set(amPm)
 
 
 root.title("Alarm")
