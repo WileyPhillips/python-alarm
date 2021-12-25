@@ -6,9 +6,11 @@ root = Tk()
 root.geometry("1920x1080")
 root.configure(bg=bgColor)
 
+alarmList = []
+
 
 def set_screen():
-    global gui, hours_entry, minutes_entry, am_pm_entry, amPm, alarms
+    global gui, hours_entry, minutes_entry, am_pm_entry, amPm, alarms, alarmList
     amPm = "am"
     hours_entry = StringVar()
     hours_entry.set("")
@@ -56,7 +58,6 @@ def add_alarm():
             hours_entry.set(hours)
         hours = str(hours)
     except:
-        print("Hours except")
         successful_alarm = False
         hours_entry.set("")
     try:
@@ -66,13 +67,23 @@ def add_alarm():
             minutes_entry.set(minutes)
         minutes = str(minutes)
     except:
-        print("Minutes except")
         successful_alarm = False
         minutes_entry.set("")
     new_alarm = "{}:{}{}".format(gui[2].get(), gui[3].get(), amPm)
     if successful_alarm:
+        insert_alarm(new_alarm)
         alarms[0].configure(text=new_alarm)
 
+
+def insert_alarm(alarm):
+    global alarm_list
+    if len(alarm_list) == 0:
+        alarm_list.append(alarm)
+        index = 0
+    else:
+        alarms.insert(Label(root, text=alarm), 0)
+    alarms[index].configure(text=alarm)
+    alarms[index].grid(row=2, column=index)
 
 root.title("Alarm")
 set_screen()
