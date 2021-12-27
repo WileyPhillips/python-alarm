@@ -1,4 +1,5 @@
 from tkinter import *
+from datetime import datetime
 
 bgColor = "#BEC2CB"
 
@@ -7,6 +8,11 @@ root.geometry("1920x1080")
 root.configure(bg=bgColor)
 
 alarmList = []
+
+
+def get_time():
+    return datetime.now().strftime("%H:%M:%S")
+
 
 
 def set_screen():
@@ -86,12 +92,15 @@ def insert_alarm(alarm):
         alarmList.append(alarm)
         index = 0
     else:
+        time = get_time()
+        print(time)
         alarmList.append(alarm)
         index = 0
         alarms.insert(index, Label(root, text=alarm))
     alarms[index].configure(text=alarm)
     for i in range(len(alarmList[index:])):
         alarms[index+i].grid(row=2, column=index+i)
+
 
 root.title("Alarm")
 set_screen()
