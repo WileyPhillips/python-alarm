@@ -74,13 +74,14 @@ def add_alarm():
                 minutes = "59"
                 minutes_entry.set(minutes)
             elif minutes < 10:
+                print("triggered")
                 minutes = "0" + str(minutes)
             else:
                 minutes = str(minutes)
         except:
             successful_alarm = False
             minutes_entry.set("")
-        new_alarm = "{}:{}{}".format(gui[2].get(), gui[3].get(), amPm)
+        new_alarm = "{}:{}{}".format(hours, minutes, amPm)
         if successful_alarm:
             insert_alarm(new_alarm)
             alarms[0].configure(text=new_alarm)
@@ -100,6 +101,10 @@ def insert_alarm(alarm):
     alarms[index].configure(text=alarm)
     for i in range(len(alarmList[index:])):
         alarms[index+i].grid(row=2, column=index+i)
+
+
+def military_time(time):
+    print("placeholder")
 
 
 root.title("Alarm")
