@@ -11,13 +11,13 @@ alarmList = []
 
 
 def get_time():
-    return datetime.now().strftime("%H:%M:%S")
+    return datetime.now().strftime("%H:%M")
 
 
 
 def set_screen():
-    global gui, hours_entry, minutes_entry, am_pm_entry, amPm, alarms, alarmList
-    amPm = "am"
+    global gui, hours_entry, minutes_entry, meridiam_entry, meridiam, alarms, alarmList
+    meridiam = "am"
     hours_entry = StringVar()
     hours_entry.set("")
     minutes_entry = StringVar()
@@ -45,17 +45,17 @@ def set_screen():
 
 
 def time_of_day():
-    global amPm
-    if amPm == "am":
-        amPm = "pm"
-        gui[4].configure(text=amPm)
+    global meridiam
+    if meridiam == "am":
+        meridiam = "pm"
+        gui[4].configure(text=meridiam)
     else:
-        amPm = "am"
-        gui[4].configure(text=amPm)
+        meridiam = "am"
+        gui[4].configure(text=meridiam)
 
 
 def add_alarm():
-    global amPm
+    global meridiam
     successful_alarm = True
     if len(alarmList) != 28:
         try:
@@ -74,14 +74,13 @@ def add_alarm():
                 minutes = "59"
                 minutes_entry.set(minutes)
             elif minutes < 10:
-                print("triggered")
                 minutes = "0" + str(minutes)
             else:
                 minutes = str(minutes)
         except:
             successful_alarm = False
             minutes_entry.set("")
-        new_alarm = "{}:{}{}".format(hours, minutes, amPm)
+        new_alarm = "{}:{}{}".format(hours, minutes, meridiam)
         if successful_alarm:
             insert_alarm(new_alarm)
             alarms[0].configure(text=new_alarm)
@@ -94,7 +93,9 @@ def insert_alarm(alarm):
         index = 0
     else:
         time = get_time()
-        print(time)
+        new_time = military_time(alarm)
+        current_time = military_time(alarmList[0])
+        print("time {} current {} new {}".format(time, new_time, current_time))
         alarmList.append(alarm)
         index = 0
         alarms.insert(index, Label(root, text=alarm))
@@ -104,7 +105,14 @@ def insert_alarm(alarm):
 
 
 def military_time(time):
-    print("placeholder")
+    index = time.find(":")
+    if time[-2:] == "pm":
+        military_hour = int(time[:index]) + 12
+    else:
+        military_hour = int(time[:index])
+    if military_hour == 12 or military_hour == 24:
+        military_hour -= 12
+    return str(military_hour) + time[index:-2]
 
 
 root.title("Alarm")
