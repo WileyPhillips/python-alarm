@@ -104,6 +104,8 @@ def insert_alarm(alarm):
         alarms[index+i].grid(row=2, column=index+i)
 
 
+# ex makes 2:00pm to 14:00
+# used for figuring out alarm order in connection to current time
 def military_time(time):
     index = time.find(":")
     if time[-2:] == "pm":
