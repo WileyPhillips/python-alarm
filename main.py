@@ -92,10 +92,15 @@ def insert_alarm(alarm):
         alarmList.append(alarm)
         index = 0
     else:
-        time = get_time()
-        new_time = military_time(alarm)
-        current_time = military_time(alarmList[0])
-        print("time {} current {} new {}".format(time, new_time, current_time))
+        time = datetime.strptime(get_time(), "%H:%M")
+        new_time = datetime.strptime(military_time(alarm), "%H:%M")
+        current_time = datetime.strptime(military_time(alarmList[0]), "%H:%M")
+        time_to_current = current_time - time
+        time_to_new = new_time - time
+        if time_to_current > time_to_new:
+            print("New--{}--first {}".format(new_time, current_time))
+        else:
+            print("Current--{}--first {}".format(current_time, new_time))
         alarmList.append(alarm)
         index = 0
         alarms.insert(index, Label(root, text=alarm))
