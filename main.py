@@ -9,6 +9,10 @@ root.configure(bg=bgColor)
 
 alarmList = []
 
+# TODO make first alarm go to next alarm
+# TODO Make next alarm go off when time
+# TODO Add "X"
+
 
 def get_time():
     return datetime.now().strftime("%H:%M") if str(datetime.now().strftime("%H:%M"))[0] != "0" \
@@ -83,17 +87,18 @@ def add_alarm():
             minutes_entry.set("")
         new_alarm = "{}:{}{}".format(hours, minutes, meridiam)
         if successful_alarm and military_time(new_alarm) != get_time() and new_alarm not in alarmList:
-            print(military_time(new_alarm))
-            print(get_time())
-            print(get_time() == military_time(new_alarm))
+            print("through to insert_alarm")
             insert_alarm(new_alarm)
 
 
 def insert_alarm(alarm):
     global alarmList
+    inserted = False
     if len(alarmList) == 0:
+        print("first alarm")
         alarmList.append(alarm)
         index = 0
+        alarms[index].configure(text=alarm)
     else:
         index = -1
         for i in range(len(alarmList)):
@@ -102,16 +107,19 @@ def insert_alarm(alarm):
             time_to_current = time_dif(current_time)
             time_to_new = time_dif(new_time)
             if time_to_current > time_to_new:
+                inserted = True
                 index = i
                 alarmList.insert(index, alarm)
                 alarms.insert(index, Label(root, text=alarm))
                 break
-        if i == -1:
+        if index == -1:
             alarmList.append(alarm)
             alarms.append(Label(root, text=alarm))
-    for i in range(len(alarmList[index:])):
-        alarms[index].configure(text=alarm)
-        alarms[index+i].grid(row=2, column=index+i)
+            alarms[len(alarmList) - 1].grid(row=2, column=len(alarmList) -1)
+    if inserted:
+        for i in range(len(alarmList[index:])):
+            alarms[index].configure(text=alarm)
+            alarms[index+i].grid(row=2, column=index+i)
 
 
 # ex makes 2:00pm to 14:00
