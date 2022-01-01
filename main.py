@@ -92,11 +92,10 @@ def insert_alarm(alarm):
         alarmList.append(alarm)
         index = 0
     else:
-        time = datetime.strptime(get_time(), "%H:%M")
-        new_time = datetime.strptime(military_time(alarm), "%H:%M")
-        current_time = datetime.strptime(military_time(alarmList[0]), "%H:%M")
-        time_to_current = current_time - time
-        time_to_new = new_time - time
+        current_time = military_time(alarms[0])
+        new_time = military_time(alarm)
+        time_to_current = time_dif(current_time)
+        time_to_new = time_dif(new_time)
         if time_to_current > time_to_new:
             print("New--{}--first {}".format(new_time, current_time))
         else:
@@ -120,6 +119,10 @@ def military_time(time):
     if military_hour == 12 or military_hour == 24:
         military_hour -= 12
     return str(military_hour) + time[index:-2]
+
+
+def time_dif(alarm):
+    print("Going to return how long until alarm")
 
 
 root.title("Alarm")
