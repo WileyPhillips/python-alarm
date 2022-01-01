@@ -11,7 +11,8 @@ alarmList = []
 
 
 def get_time():
-    return datetime.now().strftime("%H:%M")
+    return datetime.now().strftime("%H:%M") if str(datetime.now().strftime("%H:%M"))[0] != "0" \
+        else str(datetime.now().strftime("%H:%M"))[1:]
 
 
 
@@ -81,9 +82,11 @@ def add_alarm():
             successful_alarm = False
             minutes_entry.set("")
         new_alarm = "{}:{}{}".format(hours, minutes, meridiam)
-        if successful_alarm:
+        if successful_alarm and military_time(new_alarm) != get_time() and new_alarm not in alarmList:
+            print(military_time(new_alarm))
+            print(get_time())
+            print(get_time() == military_time(new_alarm))
             insert_alarm(new_alarm)
-            alarms[0].configure(text=new_alarm)
 
 
 def insert_alarm(alarm):
@@ -92,19 +95,22 @@ def insert_alarm(alarm):
         alarmList.append(alarm)
         index = 0
     else:
-        current_time = military_time(alarms[0])
-        new_time = military_time(alarm)
-        time_to_current = time_dif(current_time)
-        time_to_new = time_dif(new_time)
-        if time_to_current > time_to_new:
-            print("New--{}--first {}".format(new_time, current_time))
-        else:
-            print("Current--{}--first {}".format(current_time, new_time))
-        alarmList.append(alarm)
-        index = 0
-        alarms.insert(index, Label(root, text=alarm))
-    alarms[index].configure(text=alarm)
+        index = -1
+        for i in range(len(alarmList)):
+            current_time = military_time(alarmList[i])
+            new_time = military_time(alarm)
+            time_to_current = time_dif(current_time)
+            time_to_new = time_dif(new_time)
+            if time_to_current > time_to_new:
+                index = i
+                alarmList.insert(index, alarm)
+                alarms.insert(index, Label(root, text=alarm))
+                break
+        if i == -1:
+            alarmList.append(alarm)
+            alarms.append(Label(root, text=alarm))
     for i in range(len(alarmList[index:])):
+        alarms[index].configure(text=alarm)
         alarms[index+i].grid(row=2, column=index+i)
 
 
@@ -122,7 +128,18 @@ def military_time(time):
 
 
 def time_dif(alarm):
-    print("Going to return how long until alarm")
+    current_hour = int(str(get_time())[:str(get_time()).find(":")])
+    alarm_hour = int(str(alarm)[:str(alarm).find(":")])
+    current_min = int(str(get_time())[str(get_time()).find(":")+1:])
+    alarm_min = int(str(alarm)[str(alarm).find(":")+1:])
+    hour_dif = alarm_hour - current_hour
+    min_dif = alarm_min - current_min
+    if min_dif < 0:
+        min_dif += 60
+        hour_dif -= 1
+    if hour_dif < 0:
+        hour_dif += 24
+    return min_dif + (hour_dif * 60)
 
 
 root.title("Alarm")
