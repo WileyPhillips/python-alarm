@@ -1,5 +1,6 @@
 from tkinter import *
 from datetime import datetime
+from playsound import playsound
 
 bgColor = "#BEC2CB"
 
@@ -12,7 +13,7 @@ alarmList = []
 # TODO make first alarm go to next alarm
 # TODO Make next alarm go off when time
 # TODO Add "X"
-
+# TODO Find a way to have a while loop checking for the time while the root main loop runs
 
 def get_time():
     return datetime.now().strftime("%H:%M") if str(datetime.now().strftime("%H:%M"))[0] != "0" \
@@ -148,6 +149,11 @@ def time_dif(alarm):
     if hour_dif < 0:
         hour_dif += 24
     return min_dif + (hour_dif * 60)
+
+
+def alarm_goes_off():
+    playsound('touchdownraiders.mp3')
+    print("Alarm went off...")
 
 
 root.title("Alarm")
