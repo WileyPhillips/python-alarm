@@ -153,7 +153,6 @@ def time_dif(alarm):
 
 def alarm_goes_off():
     playsound('touchdownraiders.mp3')
-    print("Alarm went off...")
 
 
 root.title("Alarm")
